@@ -14,7 +14,6 @@
         # Views
         
         # Menu views
-        'views/av_project_menu_views.xml',
         
         # Data
         
