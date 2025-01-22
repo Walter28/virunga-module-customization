@@ -14,7 +14,6 @@
         # Views
         
         # Menu views
-        'views/av_purchase_menu_views.xml',
         
         # Data
         
