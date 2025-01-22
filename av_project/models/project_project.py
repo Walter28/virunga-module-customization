@@ -1,4 +1,4 @@
 from odoo import models, fields
 
-class AvProject(models.Model):
+class ProjectProject(models.Model):
     _inherit = 'project.project'
