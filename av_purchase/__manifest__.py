@@ -19,12 +19,5 @@
         # Data
         
     ],
-
-    'assets': {
-            'web.assets_backend': [
-                'av_purchase/static/src/*',
-            ],
-        },
-
     "installable": True
 }
