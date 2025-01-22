@@ -1,3 +1,3 @@
-# Trip Log
+# Module Customization
 
-Virunga Alliance Trip Log
+Virunga Alliance Customization
