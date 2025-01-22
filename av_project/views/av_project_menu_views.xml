@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Override Project Menu -->
+    <record id="project.menu_main_pm" model="ir.ui.menu">
+        <field name="name">Av Project</field>
+    </record>
+
+    <!-- Override Project Configuration Menu -->
+    <!-- <record id="project.menu_project_config" model="ir.ui.menu">
+        <field name="name">Project Configuration</field>
+    </record> -->
+</odoo>
