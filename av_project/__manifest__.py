@@ -6,25 +6,22 @@
     'description': "Alliance Virunga Project App",
     'author': "Virunga Foundation",
     "license":"OPL-1",
-    "depends":["project"],
+    "depends": [
+        "project",
+        "hr",
+        "purchase"
+    ],
     "application":False,
     "data": [
         # Security
+        'security/av_project_security.xml',
+        'security/ir.model.access.csv',
         
         # Views
-        
-        # Menu views
-        'views/av_project_menu_views.xml',
+        'views/av_project_views.xml',
         
         # Data
         
     ],
-
-    'assets': {
-            'web.assets_backend': [
-                'av_project/static/src/*',
-            ],
-        },
-
     "installable": True
 }

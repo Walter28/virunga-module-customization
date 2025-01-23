@@ -14,17 +14,9 @@
         # Views
         
         # Menu views
-        'views/av_purchase_menu_views.xml',
         
         # Data
         
     ],
-
-    'assets': {
-            'web.assets_backend': [
-                'av_purchase/static/src/*',
-            ],
-        },
-
     "installable": True
 }

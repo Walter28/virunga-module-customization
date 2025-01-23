@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Project Form View -->
+    <record id="av_project_form_view" model="ir.ui.view">
+        <field name="name">av.project.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <!-- Add fields in the header section -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="department_id"/>
+                <field name="department_manager_id" readonly="1" widget="many2one_avatar"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="after">
+                <field name="currency_id" invisible="1"/>
+                <field name="amount" widget="monetary"/>
+            </xpath>
+
+            <!-- Make date fields required -->
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
+            <!-- Add Purchase Orders notebook page -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Purchase Orders" name="purchase_orders">
+                    <field name="purchase_order_count" invisible="1"/>
+                    <field name="purchase_order_ids" readonly="1" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="date_order"/>
+                            <field name="amount_total"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                    <div class="text-center" invisible="purchase_order_count > 0">
+                        <h3 class="text-muted">No Purchase Orders</h3>
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
