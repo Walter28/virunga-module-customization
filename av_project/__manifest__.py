@@ -14,11 +14,11 @@
     "application":False,
     "data": [
         # Security
-        'security/av_project_security.xml',
+        'security/project_project_security.xml',
         'security/ir.model.access.csv',
         
         # Views
-        'views/av_project_views.xml',
+        'views/project_project_views.xml',
         
         # Data
         
