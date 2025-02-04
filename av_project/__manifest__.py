@@ -7,9 +7,8 @@
     'author': "Virunga Foundation",
     "license":"OPL-1",
     "depends": [
-        "project",
-        "hr",
-        "purchase"
+        "project",  # Base project management
+        "hr",       # For department integration
     ],
     "application":False,
     "data": [
