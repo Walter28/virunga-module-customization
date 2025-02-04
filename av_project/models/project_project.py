@@ -58,8 +58,7 @@ class ProjectProject(models.Model):
         
         Validates:
             1. Both start and end dates are set
-            2. Start date is before end date
-            3. Current date must be within project date range (between start and end date)
+            2. Current date must be within project date range (between start and end date)
                OR project start date must be in the future
         
         Raises:
@@ -69,11 +68,6 @@ class ProjectProject(models.Model):
             if not project.date_start or not project.date:
                 raise ValidationError(
                     _("Both start date and end date are required.")
-                )
-                
-            if project.date_start > project.date:
-                raise ValidationError(
-                    _("Project start date must be before end date.")
                 )
 
             today = fields.Date.context_today(self)
