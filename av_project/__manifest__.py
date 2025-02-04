@@ -27,7 +27,6 @@
     "data": [
         # Security
         'security/project_security.xml',
-        'security/ir.model.access.csv',
         
         # Views
         'views/project_views.xml',
