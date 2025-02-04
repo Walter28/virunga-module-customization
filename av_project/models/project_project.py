@@ -24,10 +24,8 @@ class ProjectProject(models.Model):
     amount = fields.Monetary(string='Amount', default=0.0,
                            currency_field='currency_id',
                            help="Total budget allocated for this project")
-    date_start = fields.Date(required=True,
-                            help="Project start date")
-    date = fields.Date(required=True,
-                      help="Project end date")
+    date_start = fields.Date(help="Project start date")
+    date = fields.Date(help="Project end date")
 
     @api.depends('department_id')
     def _compute_department_manager(self):
