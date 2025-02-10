@@ -26,7 +26,8 @@ class ProjectProject(models.Model):
                            help="Total budget allocated for this project")
     date_start = fields.Date(help="Project start date")
     date = fields.Date(help="Project end date")
-
+    project_stage_name = fields.Char(related='stage_id.name', string='Project Stage', store=True)
+    
     @api.depends('department_id')
     def _compute_department_manager(self):
         """
@@ -36,42 +37,50 @@ class ProjectProject(models.Model):
         for project in self:
             project.department_manager_id = project.department_id.manager_id.id if project.department_id else False
             
-
-    @api.constrains('amount')
-    def _check_amount(self):
-        """
-        Validation method to ensure project amount is not negative.
-        
-        Raises:
-            ValidationError: If the project amount is less than 0.
-        """
-        for project in self:
-            if project.amount <= 0:
-                raise ValidationError(
-                    _("Project amount cannot be negative or null.")
-                )
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'amount' in vals:
+                if vals.get('amount') <= 0:
+                    raise ValidationError(_("Project amount cannot be negative or null."))
+        return super(ProjectProject, self).create(vals_list)
 
     @api.constrains('date_start', 'date')
     def _check_date_start(self):
         """
-        Validation method to ensure project dates are properly set and logical.
-        
         Validates:
-            1. Both start and end dates are set
-            2. Current date must be within project date range (between start and end date)
-               OR project start date must be in the future
+            Project start date must be in the future or today
         
         Raises:
-            ValidationError: If any of the date validations fail
+            ValidationError: If the project start date is not in the future or today
         """
         for project in self:
-            if not project.date_start or not project.date:
-                raise ValidationError(
-                    _("Both start date and end date are required.")
-                )
+            if project.date_start:
+                today = fields.Date.context_today(self)
+                if project.date_start < today:
+                    raise ValidationError(
+                        _("Project must start in the future or today")
+                    )
 
-            today = fields.Date.context_today(self)
-            if not (project.date_start <= today <= project.date or project.date_start > today):
-                raise ValidationError(
-                    _("Current date must be within project date range (between start and end date) or project must start in the future")
-                )
+    def write(self, vals):
+        if 'stage_id' in vals:
+            stage = self.env['project.task.type'].browse(vals['stage_id'])
+            if stage.name in ['In Progress', 'Done']:
+                for project in self:
+                    # Check required fields before allowing stage change
+                    if not all([project.department_id, project.date_start, project.date, project.amount]):
+                        missing_fields = []
+                        if not project.department_id:
+                            missing_fields.append(_("Department"))
+                        if not project.date_start:
+                            missing_fields.append(_("Start Date"))
+                        if not project.date:
+                            missing_fields.append(_("End Date"))
+                        if not project.amount:
+                            missing_fields.append(_("Amount"))
+                        
+                        raise ValidationError(
+                            _("Cannot change project stage to %s.\n\nThe following fields are required :\n   ★ %s") % 
+                            (stage.name, ", ".join(missing_fields))
+                        )
+        return super(ProjectProject, self).write(vals)
