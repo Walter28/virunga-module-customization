@@ -34,6 +34,11 @@
         # Data
         
     ],
+    "assets": {
+        "web.assets_backend": [
+            "av_project/static/src/components/*"
+        ]
+    },
     "installable": True,
     "category": "Project Management",
     "maintainer": "Virunga Foundation",
