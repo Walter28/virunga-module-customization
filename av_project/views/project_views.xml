@@ -6,24 +6,27 @@
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.edit_project"/>
         <field name="arch" type="xml">
+            <!-- Add JavaScript class for custom form behavior -->
+            <xpath expr="//form" position="attributes">
+                <attribute name="js_class">edit_project_form_disable</attribute>
+            </xpath>
             <xpath expr="//form" position="inside">
                 <field name="project_stage_name" readonly="1" invisible="1" />
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="department_id" required="project_stage_name in ['In Progress', 'Done']" readonly="project_stage_name in ['In Progress', 'Done']" options="{'no_create': True, 'no_edit': True}"/>
+                <field name="department_id" required="project_stage_name in ['In Progress', 'Done']" 
+                       options="{'no_create': True, 'no_edit': True}"/>
                 <field name="department_manager_id" readonly="1" widget="many2one_avatar"/>
             </xpath>
             <xpath expr="//field[@name='date_start']" position="after">
                 <field name="currency_id" invisible="1"/>
-                <field name="amount" required="1" readonly="project_stage_name in ['In Progress', 'Done']" widget="monetary"/>
+                <field name="amount" required="1" widget="monetary"/>
             </xpath>
             <!-- Make date fields required -->
             <xpath expr="//field[@name='date_start']" position="attributes">
-                <attribute name="readonly">project_stage_name in ['In Progress', 'Done']</attribute>
                 <attribute name="required">project_stage_name in ['In Progress', 'Done']</attribute>
             </xpath>
             <xpath expr="//field[@name='date']" position="attributes">
-                <attribute name="readonly">project_stage_name in ['In Progress', 'Done']</attribute>
                 <attribute name="required">project_stage_name in ['In Progress', 'Done']</attribute>
             </xpath>
         </field>
