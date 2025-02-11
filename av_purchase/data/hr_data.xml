@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Department -->
+    <record id="department_cp" model="hr.department">
+        <field name="name">CP Department</field>
+        <field name="complete_name">Contract and Procurement Department</field>
+    </record>
+
+    <record id="department_system" model="hr.department">
+        <field name="name">System</field>
+        <field name="complete_name">System Department</field>
+        <field name="note">Responsible for all system development, maintenance, and operations across the organization.</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="active" eval="True"/>
+    </record>
+
+    <!-- Job Position -->
+    <record id="job_cp_officer" model="hr.job">
+        <field name="name">CP Officer</field>
+        <field name="department_id" ref="department_cp"/>
+        <field name="description">Contract and Procurement Officer responsible for managing procurement processes and vendor relationships.</field>
+        <field name="no_of_recruitment">2</field>
+    </record>
+
+    <record id="job_system_manager" model="hr.job">
+        <field name="name">System Department Manager</field>
+        <field name="department_id" ref="department_system"/>
+        <field name="description">Head of System Department responsible for overseeing all system operations and development.</field>
+    </record>
+
+    <record id="job_system_developer" model="hr.job">
+        <field name="name">System Developer</field>
+        <field name="department_id" ref="department_system"/>
+        <field name="description">Responsible for system development and maintenance.</field>
+    </record>
+
+    <!-- Employee -->
+    <record id="employee_muhire" model="hr.employee">
+        <field name="name">MUHIRE Christian</field>
+        <field name="job_title">System Developer</field>
+        <field name="department_id" ref="department_system"/>
+        <field name="job_id" ref="job_system_developer"/>
+        <field name="work_email">muhirecp@virunga.org</field>
+        <field name="work_phone">+250 788 123 456</field>
+        <field name="mobile_phone">+250 733 987 654</field>
+        <field name="gender">male</field>
+        <field name="marital">single</field>
+        <field name="country_id" ref="base.rw"/>
+        <field name="birthday">1990-06-15</field>
+        <field name="place_of_birth">Kigali</field>
+        <field name="emergency_contact">KALISA James</field>
+        <field name="emergency_phone">+250 788 111 222</field>
+        <field name="km_home_work">15</field>
+        <field name="image_1920" type="base64" file="av_purchase/static/img/muhire-image.png"/>
+    </record>
+
+    <record id="employee_robin" model="hr.employee">
+        <field name="name">Robin Laime</field>
+        <field name="job_id" ref="job_system_manager"/>
+        <field name="department_id" ref="department_system"/>
+        <field name="country_id" ref="base.be"/>  <!-- Belgium -->
+        <field name="gender">male</field>
+        <field name="marital">single</field>
+        <field name="work_email">robinhod@virunga.org</field>
+        <field name="work_phone">+32 123 456 789</field>
+        <field name="job_title">Head of System Department</field>
+        <field name="address_id" ref="base.main_partner"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- Update department manager after employee creation -->
+    <record id="department_system" model="hr.department">
+        <field name="manager_id" ref="employee_robin"/>
+    </record>
+</odoo>

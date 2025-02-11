@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_order_cp,purchase.order.cp,purchase.model_purchase_order,av_purchase.group_purchase_cp,1,1,1,0
+access_purchase_order_line_cp,purchase.order.line.cp,purchase.model_purchase_order_line,av_purchase.group_purchase_cp,1,1,1,0
+access_purchase_order_hod,purchase.order.hod,purchase.model_purchase_order,av_purchase.group_purchase_hod,1,1,0,0
+access_purchase_order_line_hod,purchase.order.line.hod,purchase.model_purchase_order_line,av_purchase.group_purchase_hod,1,1,0,0
