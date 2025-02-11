@@ -53,9 +53,7 @@
             
             <!-- Add Department and Project Fields after Partner Reference -->
             <xpath expr="//field[@name='partner_ref']" position="after">
-                <field name="project_id" groups="av_purchase.group_purchase_hod">
-                    <attribute name="domain-force">[('stage_id.name', '=', 'In Progress')]</attribute>
-                </field>
+                <field name="project_id" groups="av_purchase.group_purchase_hod" domain="[('stage_id.name', '=', 'In Progress')]"/>
                 <field name="department_id"/>
             </xpath>
 
