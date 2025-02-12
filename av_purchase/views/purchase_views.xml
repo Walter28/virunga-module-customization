@@ -34,7 +34,11 @@
             <!-- Hide Confirm Button (Convert to PO) for CP users -->
             <xpath expr="//button[@id='bid_confirm']" position="attributes">
                 <attribute name="groups">!av_purchase.group_purchase_cp</attribute>
-                <!-- <attribute name="invisible">state == 'draft'</attribute> -->
+            </xpath>
+
+            <!-- Configure Confirm Button -->
+            <xpath expr="//button[@name='button_confirm']" position="attributes">
+                <attribute name="name">action_confirm_wizard</attribute>
             </xpath>
 
             <!-- Hide Send for Approval Button for CP users -->
@@ -45,15 +49,22 @@
 
             <!-- Configure Cancel Button: Only visible in draft state and for CP users and HOD -->
             <xpath expr="//button[@name='button_cancel']" position="attributes">
-                <attribute name="groups">av_purchase.group_purchase_cp,av_purchase.group_purchase_hod</attribute>
-                <attribute name="invisible">state != 'draft' and is_user_cp</attribute>
+                <attribute name="groups">av_purchase.group_purchase_hod</attribute>
+                <attribute name="invisible">state != 'draft'</attribute>
             </xpath>
 
-            <!-- ============ Custom Fields Section ============ -->
+            <!-- ============ Custom Button & Fields Section ============ -->
             
             <!-- Add Department and Project Fields after Partner Reference -->
             <xpath expr="//field[@name='partner_ref']" position="after">
-                <field name="project_id" groups="av_purchase.group_purchase_hod" domain="[('stage_id.name', '=', 'In Progress')]"/>
+                <field name="hod_department_id" invisible="1"/>
+                <field name="project_id" 
+                    groups="av_purchase.group_purchase_hod" 
+                    options="{'no_create': True, 'no_open': True}"
+                    domain="[
+                        ('stage_id.name', '=', 'In Progress'),
+                        ('department_id', '=', hod_department_id)
+                    ]"/>
                 <field name="department_id"/>
             </xpath>
 
@@ -67,13 +78,6 @@
                         style="background-color: #c0c0c0; padding: 8px; border-radius: 3px; font-weight: normal; width: 100%;" 
                         invisible="not validator"/>
             </xpath>
-
-            <!-- ============ RFQ Email Button Modifications ============ -->
-            
-            <!-- Hide Original Send RFQ by Email Button -->
-            <xpath expr="//button[@name='action_rfq_send']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
             
             <!-- Add Custom Submit RFQ Button -->
             <xpath expr="//button[@name='action_rfq_send']" position="before">
@@ -84,16 +88,6 @@
                         groups="av_purchase.group_purchase_cp"
                         invisible="state != 'draft'"/>
             </xpath>
-
-            <!-- Add Approve RFQ Button for HOD -->
-            <!-- <xpath expr="//button[@name='action_rfq_send']" position="after">
-                <button name="action_approve_rfq" 
-                        string="Approve RFQ" 
-                        type="object" 
-                        class="oe_highlight"
-                        groups="av_purchase.group_purchase_hod"
-                        invisible="state != 'sent'"/>
-            </xpath> -->
 
         </field>
     </record>

@@ -23,6 +23,8 @@
         'security/ir.model.access.csv',
         
         # Views
+        'wizards/purchase_cancel_reason_views.xml',
+        'wizards/purchase_confirm_views.xml',
         'views/purchase_views.xml',
         
         # Data

@@ -3,3 +3,5 @@ access_purchase_order_cp,purchase.order.cp,purchase.model_purchase_order,av_purc
 access_purchase_order_line_cp,purchase.order.line.cp,purchase.model_purchase_order_line,av_purchase.group_purchase_cp,1,1,1,0
 access_purchase_order_hod,purchase.order.hod,purchase.model_purchase_order,av_purchase.group_purchase_hod,1,1,0,0
 access_purchase_order_line_hod,purchase.order.line.hod,purchase.model_purchase_order_line,av_purchase.group_purchase_hod,1,1,0,0
+access_purchase_cancel_reason,access_purchase_cancel_reason,model_purchase_cancel_reason,base.group_user,1,1,1,0
+access_purchase_confirm,access_purchase_confirm,model_purchase_confirm,base.group_user,1,1,1,0
