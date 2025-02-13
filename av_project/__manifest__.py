@@ -21,6 +21,7 @@
     "license": "OPL-1",
     "depends": [
         "project",  # Base project management
+        "purchase", # For purchase order integration
         "hr",       # For department integration
     ],
     "application": False,

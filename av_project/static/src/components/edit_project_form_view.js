@@ -55,9 +55,9 @@ class EditProjectFormController extends FormController {
                     e.setAttribute("disabled", 1)
                 }
             })
-            // Add pointer-events-none class to all field widgets except stage_id
+            // Add pointer-events-none class to all field widgets except stage_id and purchase_order_ids
             if(fieldWidgets) fieldWidgets.forEach(e => {
-                if (e.getAttribute("name") !== "stage_id") {
+                if (e.getAttribute("name") !== "stage_id" && e.getAttribute("name") !== "purchase_order_ids") {
                     e.classList.add("pe-none")
                 }
             })

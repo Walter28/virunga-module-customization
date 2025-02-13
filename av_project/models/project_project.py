@@ -27,6 +27,8 @@ class ProjectProject(models.Model):
     date_start = fields.Date(help="Project start date")
     date = fields.Date(help="Project end date")
     project_stage_name = fields.Char(related='stage_id.name', string='Project Stage', store=True)
+    purchase_order_ids = fields.One2many('purchase.order', 'project_id', string='Purchase Orders',
+                                       help="Purchase orders related to this project")
     
     @api.depends('department_id')
     def _compute_department_manager(self):

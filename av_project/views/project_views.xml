@@ -13,6 +13,22 @@
             <xpath expr="//form" position="inside">
                 <field name="project_stage_name" readonly="1" invisible="1" />
             </xpath>
+            <!-- Add Purchase Orders Page -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Purchase Orders" name="purchase_orders">
+                    <field name="purchase_order_ids" readonly="1" />
+                        <!-- <tree>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="state"/>
+                            <field name="date_order"/>
+                            <field name="department_id"/>
+                        </tree> -->
+                    <!-- </field> -->
+                </page>
+            </xpath>
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="department_id" required="project_stage_name in ['In Progress', 'Done']" 
                        options="{'no_create': True, 'no_edit': True}"/>
