@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Purchase Order Form View -->
+    <record id="purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add JavaScript class for custom form behavior -->
+            <xpath expr="//form" position="attributes">
+                <attribute name="js_class">purchase_order_form_disable</attribute>
+            </xpath>
+
+            <!-- ============ Field Access Control Section ============ -->
+            <xpath expr="//form" position="inside">
+                <field name="is_user_cp" readonly="1" invisible="1" />
+                <field name="is_user_hod" readonly="1" invisible="1" />
+            </xpath>
+
+            <!-- ============ Button Access Control Section ============ -->
+
+            <!-- Disable all RFQ Send buttons -->
+            <xpath expr="//button[@name='action_rfq_send']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_rfq_send'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_rfq_send'][3]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <!-- Hide Confirm Button (Convert to PO) for CP users -->
+            <xpath expr="//button[@id='bid_confirm']" position="attributes">
+                <attribute name="groups">!av_purchase.group_purchase_cp</attribute>
+            </xpath>
+
+            <!-- Configure Confirm Button -->
+            <xpath expr="//button[@name='button_confirm']" position="attributes">
+                <attribute name="name">action_confirm_wizard</attribute>
+            </xpath>
+
+            <!-- Hide Send for Approval Button for CP users -->
+            <xpath expr="//button[@id='draft_confirm']" position="attributes">
+                <attribute name="groups">!av_purchase.group_purchase_cp</attribute>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Configure Cancel Button: Only visible in draft state and for CP users and HOD -->
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="groups">av_purchase.group_purchase_hod</attribute>
+                <attribute name="invisible">state != 'draft'</attribute>
+            </xpath>
+
+            <!-- ============ Custom Button & Fields Section ============ -->
+            
+            <!-- Add Department and Project Fields after Partner Reference -->
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="hod_department_id" invisible="1"/>
+                <field name="project_id" 
+                    groups="av_purchase.group_purchase_hod" 
+                    options="{'no_create': True, 'no_open': True}"
+                    domain="[
+                        ('stage_id.name', '=', 'In Progress'),
+                        ('department_id', '=', hod_department_id)
+                    ]"/>
+                <field name="department_id"/>
+            </xpath>
+
+            <!-- Add Validator Field with Avatar and Custom Styling -->
+            <xpath expr="//field[@name='date_order']" position="before">
+                <field name="validator" 
+                        readonly="1" 
+                        decoration-info="1" 
+                        widget="many2one_avatar" 
+                        options="{'bg_color': 'rgba(200, 200, 200, 0.5)'}" 
+                        style="background-color: #c0c0c0; padding: 8px; border-radius: 3px; font-weight: normal; width: 100%;" 
+                        invisible="not validator"/>
+            </xpath>
+            
+            <!-- Add Custom Submit RFQ Button -->
+            <xpath expr="//button[@name='action_rfq_send']" position="before">
+                <button name="action_submit_rfq" 
+                        string="Submit RFQ" 
+                        type="object" 
+                        class="oe_highlight"
+                        groups="av_purchase.group_purchase_cp"
+                        invisible="state != 'draft'"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

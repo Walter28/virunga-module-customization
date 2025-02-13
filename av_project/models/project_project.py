@@ -10,8 +10,21 @@ class ProjectProject(models.Model):
     This extension adds fields for department assignment, project budget tracking,
     date management, and related purchase orders.
     """
+    """
+    Extends the project.project model to add department management, financial tracking,
+    and purchase order integration capabilities.
+
+    This extension adds fields for department assignment, project budget tracking,
+    date management, and related purchase orders.
+    """
     _inherit = 'project.project'
 
+    department_id = fields.Many2one('hr.department', string='Department',
+                                  help="Department responsible for this project")
+    department_manager_id = fields.Many2one('hr.employee', string='Department Manager',
+                                          compute='_compute_department_manager',
+                                          store=True,
+                                          help="Manager of the assigned department")
     department_id = fields.Many2one('hr.department', string='Department',
                                   help="Department responsible for this project")
     department_manager_id = fields.Many2one('hr.employee', string='Department Manager',
@@ -27,9 +40,15 @@ class ProjectProject(models.Model):
     date_start = fields.Date(help="Project start date")
     date = fields.Date(help="Project end date")
     project_stage_name = fields.Char(related='stage_id.name', string='Project Stage', store=True)
+    purchase_order_ids = fields.One2many('purchase.order', 'project_id', string='Purchase Orders',
+                                       help="Purchase orders related to this project")
     
     @api.depends('department_id')
     def _compute_department_manager(self):
+        """
+        Compute method to automatically set the department manager based on the selected department.
+        Updates the department_manager_id field whenever the department_id changes.
+        """
         """
         Compute method to automatically set the department manager based on the selected department.
         Updates the department_manager_id field whenever the department_id changes.
@@ -44,9 +63,24 @@ class ProjectProject(models.Model):
                 if vals.get('amount') <= 0:
                     raise ValidationError(_("Project amount cannot be negative or null."))
         return super(ProjectProject, self).create(vals_list)
+            
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'amount' in vals:
+                if vals.get('amount') <= 0:
+                    raise ValidationError(_("Project amount cannot be negative or null."))
+        return super(ProjectProject, self).create(vals_list)
 
     @api.constrains('date_start', 'date')
     def _check_date_start(self):
+        """
+        Validates:
+            Project start date must be in the future or today
+        
+        Raises:
+            ValidationError: If the project start date is not in the future or today
+        """
         """
         Validates:
             Project start date must be in the future or today

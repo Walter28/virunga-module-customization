@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_confirm_form" model="ir.ui.view">
+        <field name="name">purchase.confirm.form</field>
+        <field name="model">purchase.confirm</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Purchase Order">
+                <div class="alert alert-info" role="alert">
+                    <p>Are you sure you want to confirm this purchase order?</p>
+                    <p>This will subtract <strong><field name="amount_total"/></strong> from the project budget.</p>
+                    <p>Current project budget: <strong><field name="project_amount"/></strong></p>
+                </div>
+                <footer>
+                    <button string="Confirm" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_purchase_confirm" model="ir.actions.act_window">
+        <field name="name">Confirm Purchase Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.confirm</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

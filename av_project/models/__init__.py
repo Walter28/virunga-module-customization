@@ -6,3 +6,4 @@ This package contains the model definitions for the AV Project module:
 """
 
 from . import project_project
+from . import purchase_order
