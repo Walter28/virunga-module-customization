@@ -10,8 +10,21 @@ class ProjectProject(models.Model):
     This extension adds fields for department assignment, project budget tracking,
     date management, and related purchase orders.
     """
+    """
+    Extends the project.project model to add department management, financial tracking,
+    and purchase order integration capabilities.
+
+    This extension adds fields for department assignment, project budget tracking,
+    date management, and related purchase orders.
+    """
     _inherit = 'project.project'
 
+    department_id = fields.Many2one('hr.department', string='Department',
+                                  help="Department responsible for this project")
+    department_manager_id = fields.Many2one('hr.employee', string='Department Manager',
+                                          compute='_compute_department_manager',
+                                          store=True,
+                                          help="Manager of the assigned department")
     department_id = fields.Many2one('hr.department', string='Department',
                                   help="Department responsible for this project")
     department_manager_id = fields.Many2one('hr.employee', string='Department Manager',
@@ -36,8 +49,20 @@ class ProjectProject(models.Model):
         Compute method to automatically set the department manager based on the selected department.
         Updates the department_manager_id field whenever the department_id changes.
         """
+        """
+        Compute method to automatically set the department manager based on the selected department.
+        Updates the department_manager_id field whenever the department_id changes.
+        """
         for project in self:
             project.department_manager_id = project.department_id.manager_id.id if project.department_id else False
+            
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'amount' in vals:
+                if vals.get('amount') <= 0:
+                    raise ValidationError(_("Project amount cannot be negative or null."))
+        return super(ProjectProject, self).create(vals_list)
             
     @api.model_create_multi
     def create(self, vals_list):
@@ -49,6 +74,13 @@ class ProjectProject(models.Model):
 
     @api.constrains('date_start', 'date')
     def _check_date_start(self):
+        """
+        Validates:
+            Project start date must be in the future or today
+        
+        Raises:
+            ValidationError: If the project start date is not in the future or today
+        """
         """
         Validates:
             Project start date must be in the future or today
