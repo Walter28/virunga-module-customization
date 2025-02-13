@@ -5,8 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
     
-    project_id = fields.Many2one('project.project', string='Project')
-    department_id = fields.Many2one('hr.department', string='Department', required=True, 
+    department_id = fields.Many2one('hr.department', string='Department', 
                                   default=lambda self: self.get_current_user_department(), 
                                   help="Department for CP creator for this PO")
     validator = fields.Many2one('res.users', string='Validator', compute='_compute_validator', store=True)
@@ -55,12 +54,6 @@ class PurchaseOrder(models.Model):
                 raise UserError(_('CP users must be linked to an employee to create purchase orders.'))
         return super(PurchaseOrder, self).create(vals_list)
 
-    # def button_confirm(self):
-    #     self.ensure_one()
-    #     if not self.project_id:
-    #         raise UserError(_('Please set a project before confirming the purchase order.'))
-    #     return super(PurchaseOrder, self).button_confirm()
-
     def action_confirm_wizard(self):
         """Open confirmation wizard before confirming the purchase order"""
         self.ensure_one()
@@ -97,9 +90,6 @@ class PurchaseOrder(models.Model):
     @api.constrains('state', 'project_id', 'amount_total')
     def _check_project_validation(self):
         for order in self:
-            # if order.state not in ('draft', 'sent', 'cancel') and not order.project_id:
-            #     raise ValidationError(_('A project must be set for confirmed purchase orders.'))
-            
             if order.project_id and order.amount_total:
                 # Check if total exceeds project budget
                 if order.amount_total > order.project_id.amount:
@@ -115,16 +105,6 @@ class PurchaseOrder(models.Model):
                         'remaining': order.project_id.amount - order.amount_total
                     })
 
-    # @api.constrains('order_line.price_unit', 'order_line.product_qty')
-    # def _check_line_values(self):
-    #     print("++++++++ Enter _check_line_values")
-    #     for order in self:
-    #         for line in order.order_line:
-    #             if line.price_unit <= 0:
-    #                 raise ValidationError(_("Product '%s' must have a price greater than 0.") % line.product_id.name)
-    #             if line.product_qty <= 0:
-    #                 raise ValidationError(_("Product '%s' must have a quantity greater than 0.") % line.product_id.name)
-
     @api.constrains('order_line')
     def _check_order_lines(self):
         for order in self:
@@ -137,12 +117,6 @@ class PurchaseOrder(models.Model):
                     raise ValidationError(_("Product '%s' must have a price greater than 0.") % line.product_id.name)
                 if line.product_qty <= 0:
                     raise ValidationError(_("Product '%s' must have a quantity greater than 0.") % line.product_id.name)
-
-    # @api.constrains('project_id')
-    # def _check_project_budget(self):
-    #     for order in self:
-    #         if order.state == 'sent' and order.validator and not order.project_id:
-    #             raise ValidationError(_("You cannot confirm this RFQ without setting a project. Please select a project first."))
 
     def action_submit_rfq(self):
         for order in self:
